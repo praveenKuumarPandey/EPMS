@@ -8,26 +8,42 @@ import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
+import RequiredAuth from "./components/RequiredAuth";
+import Unauthorized from "./components/Unauthorized";
+import   CustomLayout    from "./components/CustomLayout";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={getToken() ? <Dashboard /> : <Navigate to="/signin" />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route
-        path="/about"
-        element={getToken() ? <About /> : <Navigate to="/signin" />}
-      />
-      <Route
-        path="/contact"
-        element={getToken() ? <Contact /> : <Navigate to="/signin" />}
-      />
-      <Route
-        path="/profile"
-        element={getToken() ? <Profile /> : <Navigate to="/signin" />}
-      />
-      <Route path="*" element={<Navigate to="/signin" replace />} />
+      <Route path="/" element={<CustomLayout />}>
+        {/*public route*/}
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
+        {/*Private routes*/}
+        <Route element={<RequiredAuth allowedRoles={['1000']} />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route
+            path="/profile"
+            element={<Profile />}
+          />
+        </Route>
+
+        <Route element={<RequiredAuth allowedRoles={['1001']} />}>
+          <Route
+            path="/about"
+            element={<About />}
+          />
+          <Route
+            path="/contact"
+            element={<Contact />}
+          />
+        </Route>
+
+      {/* catch all*/}
+        <Route path="*" element={<Navigate to="/signin" replace />} />
+      </Route>
     </Routes>
   );
 };
