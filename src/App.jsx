@@ -2,6 +2,8 @@ import React from "react";
 import { Col, Layout, Row } from "antd";
 import AppHeader from "./components/Appheader/Appheader";
 import AppRoutes from "./Routes";
+import {Link} from "react-router-dom";
+
 
 // for sidebar menu
 import { useState } from 'react';
@@ -15,28 +17,35 @@ import {
   ShopOutlined,
 } from '@ant-design/icons';
 import { Menu, Button } from 'antd';
+import { useAuthContext } from "./context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 
 const { Sider } = Layout;
 
 
 const { Header, Content } = Layout;
 
-function getItem(label, key, icon, children, type, path) {
+function getItem(label, key, icon, children, type) {
   return {
+    label,
     key,
     icon,
     children,
-    label,
     type,
-    path,
+    
   };
 }
+
+
+
+
 const items = [
   getItem('User Details', 'sub1', <UserOutlined />, [
-    getItem('User item 1', '1', null, null, null, '/profile'),
-    getItem('User item 2', '2'),
-    getItem('User item 3', '3'),
-    getItem('User item 4', '4'),
+    getItem('Home', '/',<AppstoreOutlined />),
+    getItem('Profile', '/profile', <UserOutlined />),
+    getItem('contact', '/contact', <UserOutlined />),
+    getItem('about', '/about', <SettingOutlined />),
   ]),
   getItem('Design Team WorkSpace', 'sub2', <AppstoreOutlined />, [
     getItem('Design item 5', '5'),
@@ -60,44 +69,90 @@ const items = [
   getItem('Ecommerce WorkSpace', 'grp', <ShopOutlined />, [getItem('Option 17', '17'), getItem('Option 18', '18')]),
 ];
 
+
+
 const App = () => {
+  const navigate = useNavigate();
+  const { user,setUser } = useAuthContext();
+  // if(!user){
+  //  navigate('/signin'); 
+  // }
+
+  const navigateTo = ({key}) => {
+    if(key === 'signout'){
+    // TODO: sign out feature here
+    }else{
+      console.log(key);
+      navigate(key);
+    }
+    
+    };
+
 
   const [collapsed, setCollapsed] = useState(false);
 
 
   return (
+
     <Layout>
+    {user ? (
+      <>
       <Sider className="siderComp" trigger={null} collapsible collapsed={collapsed}>
-        <Button className="sideMenuTogelBtn" style={{ padding: 29, background: '#09172e' }}> {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+      <Button className="sideMenuTogelBtn" style={{ padding: 29, background: '#09172e' }}> {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
 
-          className: 'trigger',
-          onClick: () => setCollapsed(!collapsed),
-        })}</Button>
-        <Menu className="MenuComp"
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
+        className: 'trigger',
+        onClick: () => setCollapsed(!collapsed),
+      })}</Button>
+      <Menu className="MenuComp"
+        theme="dark"
+        mode="inline"
+        defaultSelectedKeys={[window.location.pathname]}
+        defaultOpenKeys={['sub1']}
+        onClick={navigateTo}
 
-          items={items}
-        />
-      </Sider>
-      <Layout >
+        items={items}
+      />
+    </Sider>
+    <Layout >
 
-        <Row gutter={[0, 32]}>
-          <Col span={24}>
+      <Row gutter={[0, 32]}>
+        <Col span={24}>
 
-            <Header >
-              <AppHeader />
-            </Header>
-          </Col>
-          <Col span={22} offset={1}>
-            <Content>
-              <AppRoutes />
-            </Content>
-          </Col>
-        </Row>
-      </Layout>
+          <Header >
+            <AppHeader />
+          </Header>
+        </Col>
+        <Col span={22} offset={1}>
+          <Content>
+            <AppRoutes />
+          </Content>
+        </Col>
+      </Row>
+    </Layout>
+  </>
+    ) : (
+      <>
+      <Layout>
+
+      <Row gutter={[0, 32]}>
+        <Col span={24}>
+
+          <Header>
+            <AppHeader />
+          </Header>
+        </Col>
+        <Col span={22} offset={1}>
+          <Content>
+          <AppRoutes />
+          
+          </Content>
+        </Col>
+      </Row>
+    </Layout>
+</>
+    )}
+
+      
     </Layout>
   );
 };

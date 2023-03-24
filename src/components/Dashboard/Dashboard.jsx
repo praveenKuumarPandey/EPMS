@@ -19,11 +19,16 @@ import {
   import { CgWebsite } from "react-icons/cg";
   import { SiGmail } from "react-icons/si"; 
   import { API, AVATAR_API } from "../../constant";
+  import { useNavigate } from "react-router-dom";
+  import { useAuthContext } from "../../context/AuthContext";
+
   
-  const SocialCards = () => {
+  const Dashboard = () => {
+    
     const [profiles, setProfiles] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
   
+    
     const fetchProfiles = async () => {
       setIsLoading(true);
       try {
@@ -126,5 +131,5 @@ import {
     );
   };
   
-  export default SocialCards;
+  export default Dashboard;
   

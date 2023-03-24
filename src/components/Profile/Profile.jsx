@@ -6,6 +6,7 @@ import { useState } from "react";
 import { getToken } from "../../helpers";
 
 const Profile = () => {
+  
   const [loading, setLoading] = useState(false);
   const { user, isLoading, setUser } = useAuthContext();
 
