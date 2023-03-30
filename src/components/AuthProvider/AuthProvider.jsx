@@ -14,11 +14,17 @@ const AuthProvider = ({ children }) => {
   const fetchLoggedInUser = async (token) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API}/users/me`, {
+      const response = await fetch(`${API}/users/me?populate=*`, {
         headers: { Authorization: `${BEARER} ${token}` },
       });
       const data = await response.json();
-
+      let rolesAssignedArray = data.roles_permisions;
+      let rolesAssigned = [];
+      rolesAssignedArray.map(rolesAssigneditem => {
+        rolesAssigned.push(rolesAssigneditem.role_id);
+      });
+      console.log(rolesAssigned);
+      data.rolesAssigned=rolesAssigned;
       setUserData(data);
     } catch (error) {
       console.error(error);

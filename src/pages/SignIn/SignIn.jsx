@@ -22,7 +22,11 @@ const SignIn = () => {
   const navigate = useNavigate();
   const { isDesktopView } = useScreenSize();
 
-  const { setUser } = useAuthContext();
+  const { user, setUser } = useAuthContext();
+  // if(!user){
+  //  navigate('/'); 
+  // }
+  
 
   const [isLoading, setIsLoading] = useState(false);
 

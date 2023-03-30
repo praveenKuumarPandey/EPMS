@@ -4,6 +4,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import { removeToken } from "../../helpers";
+import { Link } from "react-router-dom";
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -17,15 +18,20 @@ const AppHeader = () => {
 
   return (
     <Space className="header_space">
-      <Button className="header_space_brand" href="/" type="link">
-         Andamen
-      </Button>
+
+    <Link to="/" >
+    <Button className="header_space_brand" type="link">
+    Andamen
+    </Button>
+    </Link>
       <Space className="auth_buttons">
         {user ? (
           <>
-            <Button className="auth_button_login" href="/profile" type="link">
+          <Link to="/profile" >
+            <Button className="auth_button_login" type="link">
               {user.username}
             </Button>
+            </Link>
             <Button
               className="auth_button_signUp"
               type="primary"
@@ -36,16 +42,19 @@ const AppHeader = () => {
           </>
         ) : (
           <>
-            <Button className="auth_button_login" href="/signin" type="link">
+          <Link to="/signin" >
+            <Button className="auth_button_login"  type="link">
               Login
             </Button>
+            </Link>
+            <Link to="/signup" >
             <Button
-              className="auth_button_signUp"
-              href="/signup"
+              className="auth_button_signUp"              
               type="primary"
             >
               SignUp
             </Button>
+            </Link>
           </>
         )}
       </Space>

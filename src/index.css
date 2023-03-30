@@ -139,9 +139,11 @@ code {
 
 .siderComp{
   height : 100vh;
+  
 }
 
 .MenuComp{
   height: 100vh;
+  overflow: auto;
 }
 /* for side bar */

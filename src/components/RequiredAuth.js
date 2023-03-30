@@ -4,7 +4,7 @@ import {useAuthContext} from "../context/AuthContext";
 const RequiredAuth = ({ allowedRoles }) => {
     const { user } = useAuthContext();
     const location = useLocation();
-    var Roles = user?.assignedRoles.split(',');
+    var Roles = user?.rolesAssigned;
 
 console.log(user,Roles, allowedRoles);
     return (

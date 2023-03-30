@@ -26,19 +26,43 @@ const { Sider } = Layout;
 
 const { Header, Content } = Layout;
 
-function getItem(label, key, icon, children, type) {
+function getItem(label, key, icon, children, type, disabled) {
   return {
     label,
     key,
     icon,
     children,
     type,
+    disabled,
     
   };
 }
 
+const menuitems = {
+"home": [100,1000,1001,1002,1003],
+"profile": [100,1000,1001,1002,1003],
+"contact": [1000,1001],
+"about": [1000,1002],
+}
+  
+const getReleventMenuItem = (user) =>{
+  let Roles = user?.rolesAssigned;
+  console.log(Roles)
+  let releventMenuItems = [];
+  for (const key in menuitems) {
+      let menuItem = key;
+      let accesableToRoles = menuitems[menuItem];
+    // console.log(`${menuItem}: ${menuitems[menuItem]},user : ${Roles}, condition: ${Roles?.find(role => accesableToRoles?.includes(role))}`);
+    if(Roles?.find(role => accesableToRoles?.includes(role))){
+      console.log("in if condition ")
+      releventMenuItems.push(menuItem);
+    } 
 
+}
+    console.log(releventMenuItems);
+};
 
+const items1 =[];
 
 const items = [
   getItem('User Details', 'sub1', <UserOutlined />, [
@@ -48,17 +72,16 @@ const items = [
     getItem('about', '/about', <SettingOutlined />),
   ]),
   getItem('Design Team WorkSpace', 'sub2', <AppstoreOutlined />, [
-    getItem('Design item 5', '5'),
-    getItem('Design item 6', '6'),
-    getItem('Design item 7', '7'),
-    getItem('Design item 8', '8'),
+    getItem('Product Specification', 'productSpec'),
+    getItem('Product In Process', 'prodinprogress'),
+    getItem('All Active Product', 'allproduct'),
+    
   ]),
 
   getItem('Merch Team WorkSpace', 'sub3', <SettingOutlined />, [
-    getItem('Merch 9', '9'),
-    getItem('Merch 10', '10'),
-    getItem('Merch 11', '11'),
-    getItem('Merch 12', '12'),
+    getItem('New Product', 'merch-new-prod'),
+    getItem('Product In Process', 'prod-in-progress'),
+    getItem('All Completed Products', 'merch-all-product'),    
   ]),
   getItem('Planing Team WorkSpace', 'sub4', <SettingOutlined />, [
     getItem('Planing 9', '13'),
@@ -72,11 +95,17 @@ const items = [
 
 
 const App = () => {
+
+  
   const navigate = useNavigate();
   const { user,setUser } = useAuthContext();
+  getReleventMenuItem(user);
+
+  
   // if(!user){
   //  navigate('/signin'); 
   // }
+  
 
   const navigateTo = ({key}) => {
     if(key === 'signout'){
@@ -143,8 +172,7 @@ const App = () => {
         </Col>
         <Col span={22} offset={1}>
           <Content>
-          <AppRoutes />
-          
+          <AppRoutes />          
           </Content>
         </Col>
       </Row>
